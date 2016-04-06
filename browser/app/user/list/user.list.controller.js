@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('UserListCtrl', function ($scope, users, User) {
+app.controller('UserListCtrl', function ($scope, users, User, AuthFactory) {
 	$scope.users = users;
 	$scope.addUser = function () {
 		$scope.userAdd.save()
@@ -13,4 +13,11 @@ app.controller('UserListCtrl', function ($scope, users, User) {
 	$scope.userSearch = new User();
 
 	$scope.userAdd = new User();
+
+	$scope.permissions = function () {
+		var user = AuthFactory.getUser();
+		if (!user) return false;
+		if (user.isAdmin) return 'admin';
+		else return 'user';
+	};
 });

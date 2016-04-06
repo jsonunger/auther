@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('userItem', function () {
+app.directive('userItem', function (AuthFactory) {
 	return {
 		restrict: 'E',
 		templateUrl: '/browser/app/user/item/user.item.html',
