@@ -31,6 +31,18 @@ var User = new mongoose.Schema({
 		name: String,
 		email: String
 	},
+	twitter: {
+		id: String,
+		token: String,
+		name: String,
+		email: String
+	},
+	github: {
+		id: String,
+		token: String,
+		name: String,
+		email: String
+	},
 	isAdmin: {
 		type: Boolean,
 		default: false

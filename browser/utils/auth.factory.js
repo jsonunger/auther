@@ -59,5 +59,11 @@ app.factory('AuthFactory', function ($http, $state) {
     .then(getData);
   };
 
+  AuthFactory.permissions = function () {
+    var user = AuthFactory.getUser();
+    if (!user) return false;
+    else return user;
+  };
+
   return AuthFactory;
 });

@@ -9,19 +9,19 @@ app.use(require('./logging.middleware'));
 
 app.use(require('./session.middleware'));
 
-app.use(function (req, res, next) {
-    console.log('session', req.session);
-    next();
-});
+// app.use(function (req, res, next) {
+//   console.log('session', req.session);
+//   next();
+// });
 
 app.use(passport.initialize());
 
 app.use(passport.session());
 
-app.use(function (req, res, next) {
-    console.log('user', req.user);
-    next();
-});
+// app.use(function (req, res, next) {
+//   console.log('user', req.user);
+//   next();
+// });
 
 app.use(require('./requestState.middleware'));
 
@@ -34,8 +34,12 @@ app.use('/auth', require('./auth.routes'));
 app.post('/login', (req,res,next) => {
   User.findOne({email: req.body.email, password: req.body.password}).then(user => {
     if (user) {
-      req.session.user = user;
-      res.status(200).json(user);
+      req.login(user, err => {
+        if (err) return next(err);
+        return res.status(201).json(user);
+      });
+      // req.session.user = user;
+      // res.status(200).json(user);
     } else {
       res.sendStatus(401);
     }
@@ -44,10 +48,10 @@ app.post('/login', (req,res,next) => {
 });
 
 app.post('/logout', (req,res,next) => {
-  if (!req.session.user) {
+  if (!req.user) {
     res.sendStatus(400);
   } else {
-    req.session.destroy();
+    req.logout();
     res.sendStatus(201);
   }
 });

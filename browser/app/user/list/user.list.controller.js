@@ -14,10 +14,5 @@ app.controller('UserListCtrl', function ($scope, users, User, AuthFactory) {
 
 	$scope.userAdd = new User();
 
-	$scope.permissions = function () {
-		var user = AuthFactory.getUser();
-		if (!user) return false;
-		if (user.isAdmin) return 'admin';
-		else return 'user';
-	};
+	$scope.permissions = AuthFactory.permissions;
 });

@@ -24,6 +24,7 @@ app.directive('userItem', function (AuthFactory) {
 					scope.user.isDestroyed = true;
 				});
 			};
+			scope.permissions = AuthFactory.permissions;
 		}
-	}
+	};
 });

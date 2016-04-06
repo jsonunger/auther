@@ -1,5 +1,5 @@
 <div class="container">
-	<div class="list-group-item story-item">
+	<div ng-if="permissions()" class="list-group-item story-item">
 		<ul class="list-inline">
 			<li>
 				<span class="large-font" contenteditable ng-model="searchStory.title" placeholder="Story Title"></span>
@@ -13,23 +13,24 @@
 	</div>
 	<br>
 	<ul class="list-group">
-		<li class="list-group-item story-item">
+		<li ng-if="permissions()" class="list-group-item story-item">
 			<ul class="list-inline">
 				<li>
 					<span class="large-font" contenteditable ng-model="newStory.title" placeholder="Story Title"></span>
 				</li><li>
 					<span>by</span>
 				</li><li>
-					<select ng-options="user as user.name for user in users track by user._id" ng-model="newStory.author" required>
+					<select ng-if="permissions().isAdmin" ng-options="user as user.name for user in users track by user._id" ng-model="newStory.author" required>
 						<option value='' disabled>(select an author)</option>
 					</select>
+					<input ng-if="permissions() === user && !permissions().isAdmin" ng-value="user.name" disabled />
 				</li>
 			</ul>
 			<button class="btn btn-warning btn-xs" ng-click="addStory()">
 				<span class="glyphicon glyphicon-plus"></span>
 			</button>
 		</li>
-		<li ng-repeat="story in stories | filter:searchStory" class="list-group-item story-item">
+		<li ng-repeat="story in stories | filter: searchStory" class="list-group-item story-item">
 			<ul class="list-inline">
 				<li>
 					<a class="large-font" ui-sref="story({id: story._id})">{{ story.title }}</a>
@@ -39,7 +40,7 @@
 					<a ui-sref="user({id: story.author._id})">{{ story.author.name }}</a>
 				</li>
 			</ul>
-			<button class="btn btn-default btn-xs" ng-click="removeStory(story)">
+			<button ng-if="permissions().isAdmin || story.author._id === user._id" class="btn btn-default btn-xs" ng-click="removeStory(story)">
 				<span class="glyphicon glyphicon-remove"></span>
 			</button>
 		</li>

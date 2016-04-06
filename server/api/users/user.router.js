@@ -1,7 +1,7 @@
 'use strict';
 
 var router = require('express').Router(),
-	_ = require('lodash');
+_ = require('lodash');
 
 var HttpError = require('../../utils/HttpError');
 var User = require('./user.model');
@@ -27,8 +27,10 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res, next) {
 	User.create(req.body)
 	.then(function (user) {
-		req.session.user = user;
-		res.status(201).json(user);
+		req.login(user, err => {
+			if (err) return next(err);
+			return res.status(201).json(user);
+		});
 	})
 	.then(null, next);
 });
