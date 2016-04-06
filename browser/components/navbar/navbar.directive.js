@@ -16,9 +16,18 @@ app.directive('navbar', function ($state, $location, $http, AuthFactory) {
 				else return user.email;
 			};
 
-			scope.logout = function () {
+			scope.logout = function (event) {
 				return AuthFactory.logout();
 			};
+
+			// scope.userpage = function () {
+			// 	var user = AuthFactory.getUser();
+			// 	if (!user) return;
+			// 	else {
+			// 		event.preventDefault();
+			// 		$state.go('user', {id: user._id});
+			// 	}
+			// };
 		}
 	};
 });

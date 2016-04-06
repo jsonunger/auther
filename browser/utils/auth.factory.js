@@ -19,20 +19,16 @@ app.factory('AuthFactory', function ($http, $state) {
     return $http.post('/login', user)
     .then(getData)
     .then(function (returnedUser) {
-      setUser(returnedUser);
-      $state.go('stories');
+      if (returnedUser) {
+        return returnedUser;
+      } else {
+        return $http.post('/api/users', user)
+        .then(getData);
+      }
     })
-    .catch(function (err) {
-      alert(err.statusText);
-    });
-  };
-
-  AuthFactory.signup = function (user) {
-    return $http.post('/api/users', user)
-    .then(getData)
     .then(function (returnedUser) {
       setUser(returnedUser);
-      $state.go('stories');
+      $state.go('home');
     })
     .catch(function (err) {
       alert(err.statusText);

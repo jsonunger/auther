@@ -32,16 +32,18 @@ app.use('/api', require('../api/api.router'));
 app.use('/auth', require('./auth.routes'));
 
 app.post('/login', (req,res,next) => {
-  User.findOne({email: req.body.email, password: req.body.password}).then(user => {
-    if (user) {
+  User.findOne({email: req.body.email}).then(user => {
+    if (user && user.password === req.body.password) {
       req.login(user, err => {
         if (err) return next(err);
-        return res.status(201).json(user);
+        return res.status(200).json(user);
       });
       // req.session.user = user;
       // res.status(200).json(user);
-    } else {
+    } else if (user) {
       res.sendStatus(401);
+    } else {
+      res.sendStatus(204);
     }
   })
   .catch(next);
